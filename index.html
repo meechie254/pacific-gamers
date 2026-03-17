@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenca Gamers - Home | Elite 4K Gaming Universe</title>
+  <meta name="description" content="Welcome to Zenca Gamers, the world's most immersive 4K gaming destination. Explore elite titles, premium gear, and unbeatable prices.">
+  <meta name="keywords" content="gaming, 4K games, gaming gear, consoles, Zenca Gamers, video games">
+  <meta property="og:title" content="Zenca Gamers - Elite 4K Gaming Universe">
+  <meta property="og:description" content="Dive into the ultimate gaming experience with Zenca Gamers.">
+  <meta property="og:image" content="img/ac_mirage.png">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/cart.js"></script>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <h1>Zenca Gamers</h1>
+    <ul>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li class="cart-nav">
+        <a href="checkout.html" class="cart-icon-btn">
+          🛒 <span class="cart-count">0</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Elite Cinematic Video Showcase -->
+  <section class="video-hero" style="background: url('img/ac_mirage.png') center/cover no-repeat;">
+    <div class="video-background">
+      <div id="heroVideoPlayer"></div>
+    </div>
+    <div class="video-overlay"></div>
+    <div class="video-content">
+      <h2 class="animate-text">Live the Legend</h2>
+      <p>The world's most immersive 4K gaming destination. Elite titles, premium gear, unbeatable prices.</p>
+      <div class="video-actions">
+        <a href="shop.html" class="btn-primary-neon">Enter Catalog</a>
+        <a href="#gallery" class="btn-secondary-glass">Elite Gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- YouTube IFrame API for Bulletproof Playback -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('heroVideoPlayer', {
+        videoId: 'K_9tX4eH6QU', // EA SPORTS FC 25 & Major Titles Cinematic Montage
+        playerVars: {
+          'autoplay': 1,
+          'mute': 1,
+          'loop': 1,
+          'playlist': 'K_9tX4eH6QU',
+          'controls': 0,
+          'showinfo': 0,
+          'rel': 0,
+          'modestbranding': 1,
+          'playsinline': 1,
+          'enablejsapi': 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+    function onPlayerReady(event) {
+      event.target.playVideo();
+    }
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        player.playVideo();
+      }
+    }
+  </script>
+
+  <!-- Elite Gallery (Slow Motion Slide View) -->
+  <section id="gallery" class="elite-gallery">
+    <div class="gallery-header">
+      <h2>Elite Game Universe</h2>
+      <p>Explore the legends. Thousands of worlds, one destination.</p>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        <!-- Using Local Images for 100% Reliability -->
+        <div class="carousel-slide"><img src="img/ac_mirage.png" alt="AC Mirage"></div>
+        <div class="carousel-slide"><img src="img/ghost_tsushima.png" alt="Ghost of Tsushima"></div>
+        <div class="carousel-slide"><img src="img/tekken8.png" alt="Tekken 8"></div>
+        <div class="carousel-slide"><img src="img/re4_remake.png" alt="RE4 Remake"></div>
+        <div class="carousel-slide"><img src="img/gta5.jpg" alt="GTA V"></div>
+        <div class="carousel-slide"><img src="img/fortnite.jpg" alt="Fortnite"></div>
+        <div class="carousel-slide"><img src="img/fifa25.jpg" alt="FIFA 25"></div>
+        <div class="carousel-slide"><img src="img/eldenring.jpg" alt="Elden Ring"></div>
+        <div class="carousel-slide"><img src="img/cod.jpg" alt="Call of Duty"></div>
+        <div class="carousel-slide"><img src="img/spiderman.jpg" alt="Spiderman"></div>
+        <div class="carousel-slide"><img src="img/halo.jpg" alt="Halo"></div>
+        <div class="carousel-slide"><img src="img/minecraft.jpg" alt="Minecraft"></div>
+        <div class="carousel-slide"><img src="img/mk1.jpg" alt="Mortal Kombat 1"></div>
+        <!-- Duplicates to fill 20 slots -->
+        <div class="carousel-slide"><img src="img/ac_mirage.png" alt="AC Mirage"></div>
+        <div class="carousel-slide"><img src="img/ghost_tsushima.png" alt="Ghost of Tsushima"></div>
+        <div class="carousel-slide"><img src="img/tekken8.png" alt="Tekken 8"></div>
+        <div class="carousel-slide"><img src="img/re4_remake.png" alt="RE4 Remake"></div>
+        <div class="carousel-slide"><img src="img/gta5.jpg" alt="GTA V"></div>
+        <div class="carousel-slide"><img src="img/fortnite.jpg" alt="Fortnite"></div>
+        <div class="carousel-slide"><img src="img/fifa25.jpg" alt="FIFA 25"></div>
+        <!-- Duplicates for Seamless Infinite Loop (Total 40 slides) -->
+        <div class="carousel-slide"><img src="img/ac_mirage.png" alt="AC Mirage"></div>
+        <div class="carousel-slide"><img src="img/ghost_tsushima.png" alt="Ghost of Tsushima"></div>
+        <div class="carousel-slide"><img src="img/tekken8.png" alt="Tekken 8"></div>
+        <div class="carousel-slide"><img src="img/re4_remake.png" alt="RE4 Remake"></div>
+        <div class="carousel-slide"><img src="img/gta5.jpg" alt="GTA V"></div>
+        <div class="carousel-slide"><img src="img/fortnite.jpg" alt="Fortnite"></div>
+        <div class="carousel-slide"><img src="img/fifa25.jpg" alt="FIFA 25"></div>
+        <div class="carousel-slide"><img src="img/eldenring.jpg" alt="Elden Ring"></div>
+        <div class="carousel-slide"><img src="img/cod.jpg" alt="Call of Duty"></div>
+        <div class="carousel-slide"><img src="img/spiderman.jpg" alt="Spiderman"></div>
+        <div class="carousel-slide"><img src="img/halo.jpg" alt="Halo"></div>
+        <div class="carousel-slide"><img src="img/minecraft.jpg" alt="Minecraft"></div>
+        <div class="carousel-slide"><img src="img/mk1.jpg" alt="Mortal Kombat 1"></div>
+        <div class="carousel-slide"><img src="img/ac_mirage.png" alt="AC Mirage"></div>
+        <div class="carousel-slide"><img src="img/ghost_tsushima.png" alt="Ghost of Tsushima"></div>
+        <div class="carousel-slide"><img src="img/tekken8.png" alt="Tekken 8"></div>
+        <div class="carousel-slide"><img src="img/re4_remake.png" alt="RE4 Remake"></div>
+        <div class="carousel-slide"><img src="img/gta5.jpg" alt="GTA V"></div>
+        <div class="carousel-slide"><img src="img/fortnite.jpg" alt="Fortnite"></div>
+        <div class="carousel-slide"><img src="img/fifa25.jpg" alt="FIFA 25"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Old Hero Banner (Hidden or Refactored) -->
+  <!-- 
+  <header class="hero">
+    <div class="hero-content" style="max-width: 800px; margin: 0 auto;">
+      <h2>Level Up Your Play</h2>
+      <p>Your gateway to the hottest gaming worlds. Experience premium gear and elite titles.</p>
+      <a href="shop.html" class="btn-add" style="display: inline-block; padding: 15px 40px;">Explore Shop</a>
+    </div>
+  </header>
+  -->
+
+  <!-- Intro Section -->
+  <section class="featured" style="background: rgba(0, 255, 204, 0.03); border-radius: 20px; margin-top: 40px;">
+    <h2>Experience Gaming Excellence</h2>
+    <p>We are passionate about bringing gamers the best titles, accessories, and community events. 
+       Whether you're into action, sports, RPGs, or battle royale, Zenca Gamers is your one-stop hub.</p>
+  </section>
+
+  <!-- Game Showcase -->
+  <section class="shop-main" style="padding: 60px 5%;">
+    <h2 style="text-align: center; color: var(--primary); margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px;">Trending Now</h2>
+    <div class="products-grid" id="trendingGrid">
+      <p style="text-align: center; color: #888; grid-column: 1/-1;">Loading trending gear...</p>
+    </div>
+  </section>
+
+  <script>
+    async function loadTrending() {
+        try {
+            const res = await fetch('/api/products/trending');
+            const products = await res.json();
+            const grid = document.getElementById('trendingGrid');
+            
+            grid.innerHTML = products.map(p => `
+                <article class="product-card">
+                    <img src="${p.image_url}" alt="${p.name}" class="product-thumb">
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <p class="product-price">$${p.price}</p>
+                        <p class="product-desc">${p.description}</p>
+                        <button onclick='Cart.addItem(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="btn-add">Add to Cart</button>
+                    </div>
+                </article>
+            `).join('') || '<p style="text-align: center; color: #888; grid-column: 1/-1;">Check back soon for trending gear!</p>';
+        } catch (err) {
+            console.error('Failed to load trending products:', err);
+        }
+    }
+    loadTrending();
+  </script>
+
+  <!-- Newsletter Signup -->
+  <section class="featured">
+    <div class="widget" style="max-width: 600px; margin: 0 auto; padding: 40px;">
+      <h2 style="margin-bottom: 15px;">Stay Connected</h2>
+      <p style="margin-bottom: 30px;">Sign up for our newsletter to get updates on new releases, deals, and events.</p>
+      <form id="subscribeForm" class="contact-form-modern" style="display: flex; gap: 10px;">
+        <input type="email" id="subEmail" placeholder="Enter your email" required style="flex: 1; padding: 12px; border-radius: 6px; background: #252525; border: 1px solid rgba(255,255,255,0.1); color: white;">
+        <button type="submit" class="btn-add" style="padding: 12px 25px;">Subscribe</button>
+      </form>
+      <div id="subStatus" style="margin-top: 15px; font-size: 0.9rem; display: none;"></div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('subscribeForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('subEmail').value;
+      const status = document.getElementById('subStatus');
+      
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const result = await res.json();
+        
+        status.textContent = result.message || result.error;
+        status.style.color = result.error ? '#ff4444' : 'var(--primary)';
+        status.style.display = 'block';
+        if (!result.error) e.target.reset();
+      } catch (err) {
+        console.error('Subscription failed:', err);
+      }
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Zenca Gamers. All rights reserved. | Follow us on Instagram, TikTok, YouTube</p>
+  </footer>
+</body>
+</html>

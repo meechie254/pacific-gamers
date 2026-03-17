@@ -1,0 +1,220 @@
+/* Responsive Design for Zenca Gamers */
+
+/* Mobile First Breakpoints */
+@media (max-width: 480px) {
+  :root {
+    --font-size-4xl: 2rem;
+    --font-size-3xl: 1.5rem;
+    --font-size-2xl: 1.25rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Mobile navigation adjustments */
+  .navbar {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .navbar h1 {
+    font-size: 1.25rem;
+  }
+
+  /* Hero section mobile */
+  .hero {
+    padding: var(--spacing-3xl) var(--spacing-md);
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero p {
+    font-size: var(--font-size-base);
+  }
+
+  /* Grid adjustments for mobile */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Card adjustments */
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  /* Form adjustments */
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Tablet styles */
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  /* Navigation adjustments */
+  .navbar ul {
+    display: none; /* Hide desktop nav on tablet */
+  }
+
+  /* Mobile menu button would go here */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  /* Sidebar adjustments */
+  .sidebar {
+    position: static;
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .shop-container {
+    flex-direction: column;
+  }
+
+  /* Modal adjustments */
+  .modal-content {
+    margin: var(--spacing-md);
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Small desktop styles */
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .container {
+    max-width: 1000px;
+  }
+}
+
+@media (min-width: 1025px) {
+  /* Large desktop styles */
+  .container {
+    max-width: 1200px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  /* Enhanced hover effects for desktop */
+  .card:hover {
+    transform: translateY(-4px);
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Enhanced shadows and effects for high DPI */
+  .card:hover {
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+/* Dark mode preferences (if needed in future) */
+@media (prefers-color-scheme: dark) {
+  /* Already using dark theme by default */
+}
+
+/* Orientation changes */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  /* Landscape mobile adjustments */
+  .hero {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* Print styles */
+@media print {
+  .btn, .navbar, .footer, .modal, .toast-container {
+    display: none !important;
+  }
+
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .card {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+/* Accessibility: High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --border-light: rgba(255, 255, 255, 0.3);
+    --border-medium: rgba(255, 255, 255, 0.5);
+    --border-heavy: rgba(255, 255, 255, 0.8);
+  }
+
+  .btn {
+    border: 2px solid currentColor;
+  }
+
+  .card {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .btn,
+  .product-card,
+  .modal-content {
+    transition: none;
+  }
+
+  .loading-skeleton {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

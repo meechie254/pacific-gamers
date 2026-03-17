@@ -1,0 +1,156 @@
+/* App.css - Main Application Styles */
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  overflow-x: hidden;
+}
+
+.main-content {
+  flex: 1;
+  min-height: calc(100vh - 200px); /* Account for navbar and footer */
+  position: relative;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Loading states */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.loading-overlay.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Error boundaries */
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: var(--spacing-2xl);
+  text-align: center;
+}
+
+.error-boundary h2 {
+  color: var(--secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.error-boundary p {
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-xl);
+  max-width: 500px;
+}
+
+.error-boundary .btn {
+  margin: 0 var(--spacing-sm);
+}
+
+/* Focus management for accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Skip to main content link (for screen readers) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary);
+  color: var(--text-inverse);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  z-index: 1000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Print styles */
+@media print {
+  .App {
+    background: white !important;
+  }
+
+  .main-content {
+    min-height: auto;
+  }
+
+  .skip-link,
+  .navbar,
+  .sidebar,
+  .cart-sidebar,
+  .footer {
+    display: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .App {
+    --border-light: rgba(255, 255, 255, 0.5);
+    --border-medium: rgba(255, 255, 255, 0.8);
+    --text-secondary: var(--text-primary);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-exit-active {
+    transition: none;
+  }
+
+  .loading-overlay {
+    animation: none;
+  }
+}

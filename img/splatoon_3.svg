@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="330">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2b2b2b" />
+      <stop offset="100%" stop-color="#101010" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="330" fill="url(#grad)"/>
+  <text x="50%" y="50%" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
+    Splatoon 3
+  </text>
+</svg>

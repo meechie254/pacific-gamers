@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Zenca Gamers | Get in Touch for Elite Support</title>
+  <meta name="description" content="Have questions about gaming gear, orders, or upcoming tournaments? Contact Zenca Gamers today. We're here to help you level up.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="contact-page">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <h1>Zenca Gamers</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <h2>Get in Touch</h2>
+    <p>Have questions or need support? We're here to help.</p>
+  </header>
+
+  <main class="contact">
+    <div class="contact-container">
+      <!-- Left: Contact Info -->
+      <section class="contact-info">
+        <div class="info-card">
+          <h3 class="widget-title">Visit Our Stores</h3>
+          <div class="location-item">
+            <h4>MAKUTANO</h4>
+            <p>Sayen Makutano, Meru, Kenya</p>
+          </div>
+          <div class="location-item">
+            <h4>GITIMBINE</h4>
+            <p>Selenite Mall, Meru, Kenya</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h3 class="widget-title">Connect</h3>
+          <p><strong>Phone:</strong> +254701668561</p>
+          <p><strong>Email:</strong> support@zencagamers.com</p>
+          <div class="social-icons">
+            <!-- Simplified social links -->
+            <a href="#" class="filter-item">Instagram</a>
+            <a href="#" class="filter-item">TikTok</a>
+            <a href="#" class="filter-item">WhatsApp</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Contact Form -->
+      <section class="contact-form-section">
+        <div class="widget">
+          <h3 class="widget-title">Send a Message</h3>
+          <form class="contact-form-modern">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject">
+                <option value="general">General Inquiry</option>
+                <option value="support">Technical Support</option>
+                <option value="orders">Order Status</option>
+                <option value="booking">Tournament Booking</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" rows="5" placeholder="How can we help?" required></textarea>
+            </div>
+            <button type="submit" class="btn-add" style="width: 100%;">Send Message</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Zenca Gamers. All rights reserved. | Follow us on Instagram, TikTok, YouTube</p>
+  </footer>
+
+  <style>
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 40px;
+    }
+    .info-card {
+      background: var(--bg-card);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 30px;
+    }
+    .location-item {
+      margin-bottom: 20px;
+    }
+    .location-item h4 {
+      color: var(--primary);
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .contact-form-modern .form-group {
+      margin-bottom: 20px;
+    }
+    .contact-form-modern label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .contact-form-modern input, 
+    .contact-form-modern select, 
+    .contact-form-modern textarea {
+      width: 100%;
+      padding: 12px 15px;
+      background: #252525;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: white;
+      transition: var(--transition);
+    }
+    .contact-form-modern input:focus, 
+    .contact-form-modern select:focus, 
+    .contact-form-modern textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+    @media (max-width: 768px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script>
+    document.querySelector('.contact-form-modern').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+      };
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('Message sent successfully! Thank you for contacting Zenca Gamers.');
+          e.target.reset();
+        } else {
+          alert('Error: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Submission failed:', error);
+        alert('Could not connect to the server. Please try again later.');
+      }
+    });
+  </script>
+</body>
+</html>
