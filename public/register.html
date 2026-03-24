@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Pacific Gamers | Join the Elite</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-container {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 5%;
+    }
+    .auth-card {
+      background: var(--bg-card);
+      padding: 40px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+    .auth-card h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .form-group-modern { margin-bottom: 20px; }
+    .form-group-modern label { display: block; margin-bottom: 8px; color: var(--text-dim); font-size: 0.85rem; }
+    .form-group-modern input {
+      width: 100%;
+      padding: 12px;
+      background: #252525;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: white;
+      transition: var(--transition);
+    }
+    .form-group-modern input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
+    .auth-footer { text-align: center; margin-top: 20px; color: var(--text-dim); font-size: 0.9rem; }
+    .auth-footer a { color: var(--primary); text-decoration: none; }
+    #statusMsg { margin-top: 15px; text-align: center; font-size: 0.9rem; display: none; }
+  </style>
+</head>
+<body class="auth-page">
+  <nav class="navbar">
+    <h1>Pacific Gamers</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="booking.html">Booking</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="auth-container">
+    <div class="auth-card">
+      <h2>Join the Elite</h2>
+      <form id="registerForm">
+        <div class="form-group-modern">
+          <label for="username">Username</label>
+          <input type="text" id="username" required placeholder="Choose a username">
+        </div>
+        <div class="form-group-modern">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="Enter your email">
+        </div>
+        <div class="form-group-modern">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="Create a password">
+        </div>
+        <button type="submit" class="btn-add" style="width: 100%; padding: 15px;">Create Account</button>
+      </form>
+      <div id="statusMsg"></div>
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('statusMsg');
+      const data = {
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+      };
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        status.textContent = result.message || result.error;
+        status.style.color = res.ok ? 'var(--primary)' : '#ff4444';
+        status.style.display = 'block';
+        
+        if (res.ok) {
+          setTimeout(() => window.location.href = 'login.html', 2000);
+        }
+      } catch (err) {
+        console.error('Registration failed:', err);
+      }
+    });
+  </script>
+
+  <footer class="footer">
+    <p>&copy; 2026 Pacific Gamers. All rights reserved.</p>
+  </footer>
+</body>
+</html>

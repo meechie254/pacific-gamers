@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pacific Gamers | Elite Access</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+        }
+        .login-box {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            width: 400px;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .login-box h2 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            background: rgba(0, 255, 204, 0.05);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
+        }
+        #loginError {
+            color: #ff4444;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            display: none;
+        }
+        .auth-footer { margin-top: 20px; color: var(--text-dim); font-size: 0.9rem; }
+        .auth-footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>System Access</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username" class="form-control" required placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter password">
+            </div>
+            <div class="form-group">
+                <label>Login As</label>
+                <select id="loginType" class="form-control">
+                    <option value="user">Elite Gamer (Customer)</option>
+                    <option value="admin">System Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-login" id="loginBtn">Authorize</button>
+            <div id="loginError">Invalid username or password</div>
+        </form>
+        <div class="auth-footer">
+            New to the grid? <a href="register.html">Join the Elite</a>
+        </div>
+    </div>
+
+    <script>
+        const loginTypeSelect = document.getElementById('loginType');
+        const passwordField = document.getElementById('password');
+
+        // Allow all users to provide passwords (Professional Security)
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            errorDiv.style.display = 'none';
+
+            const data = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                type: document.getElementById('loginType').value
+            };
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('pacific_token', result.token);
+                    localStorage.setItem('pacific_user', JSON.stringify(result.user));
+                    
+                    if (result.user.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'profile.html';
+                    }
+                } else {
+                    errorDiv.textContent = result.error || 'Login failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                errorDiv.textContent = 'Connection error. Try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Authorize';
+            }
+        });
+
+        // Redirect if already logged in
+        const token = localStorage.getItem('pacific_token');
+        if (token) {
+            const user = JSON.parse(localStorage.getItem('pacific_user'));
+            window.location.href = user.role === 'admin' ? 'admin.html' : 'profile.html';
+        }
+    </script>
+</body>
+</html>
+

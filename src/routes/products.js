@@ -2,10 +2,43 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/Database');
 
-// Get all products (only active ones)
+let productCache = null;
+let cacheTimestamp = 0;
+const CACHE_STALE_TIME = 2 * 60 * 1000; // 2 minutes
+
+// Get all products (with optional filtering and caching)
 router.get('/', async (req, res) => {
+    const { search, category } = req.query;
+
+    // Return cached data for basic 'all' request if not stale
+    if (!search && (!category || category === 'all') && productCache && (Date.now() - cacheTimestamp < CACHE_STALE_TIME)) {
+        return res.json(productCache);
+    }
+
+    let sql = "SELECT * FROM products WHERE is_deleted = 0";
+    const params = [];
+
+    if (search) {
+        sql += " AND (name LIKE ? OR description LIKE ?)";
+        params.push(`%${search}%`, `%${search}%`);
+    }
+
+    if (category && category !== 'all') {
+        sql += " AND category = ?";
+        params.push(category);
+    }
+
+    sql += " ORDER BY created_at DESC";
+
     try {
-        const products = await db.all("SELECT * FROM products WHERE is_deleted = 0 ORDER BY created_at DESC");
+        const products = await db.all(sql, params);
+        
+        // Update cache for the 'all' request
+        if (!search && (!category || category === 'all')) {
+            productCache = products;
+            cacheTimestamp = Date.now();
+        }
+
         res.json(products);
     } catch (err) {
         res.status(500).json({ error: err.message });

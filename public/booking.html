@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Service - Pacific Gamers | Elite Gaming Services</title>
+  <meta name="description" content="Book your spot in elite tournaments or schedule professional hardware repairs and upgrades at Pacific Gamers.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .booking-hero {
+      background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.9)), url('img/tekken8.png') center/cover no-repeat;
+      padding: 100px 5%;
+      text-align: center;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .booking-hero h2 {
+      font-size: 3.5rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 20px var(--primary);
+      margin-bottom: 15px;
+    }
+    .booking-hero p {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 700px;
+    }
+    
+    .booking-container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 50px;
+      padding: 80px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .services-info {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .service-card-modern {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+    }
+
+    .service-card-modern:hover {
+      border-color: var(--primary);
+      background: rgba(0, 255, 204, 0.05);
+      transform: translateX(10px);
+    }
+
+    .service-card-modern h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+
+    .service-card-modern p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+
+    .booking-form-wrapper {
+      background: var(--bg-card);
+      padding: 40px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .booking-form-wrapper h3 {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .form-group-modern {
+      margin-bottom: 25px;
+    }
+
+    .form-group-modern label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-group-modern input, 
+    .form-group-modern select, 
+    .form-group-modern textarea {
+      width: 100%;
+      padding: 12px 15px;
+      background: #252525;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: white;
+      transition: var(--transition);
+    }
+
+    .form-group-modern input:focus, 
+    .form-group-modern select:focus, 
+    .form-group-modern textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+    }
+
+    #bookingStatus {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+
+    @media (max-width: 992px) {
+      .booking-container { grid-template-columns: 1fr; }
+      .booking-hero h2 { font-size: 2.5rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <script src="js/auth-nav.js"></script>
+  <script src="js/live-chat.js"></script>
+  <script src="js/ui.js" defer></script>
+</head>
+<body class="booking-page">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <h1>Pacific Gamers</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="booking.html" class="active">Booking</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="booking-hero">
+    <h2>Secure Your Glory</h2>
+    <p>Join elite tournaments, schedule expert repairs, or consult with our hardware masters. Your next level starts here.</p>
+  </header>
+
+  <main class="booking-container">
+    <!-- Services Breakdown -->
+    <section class="services-info">
+      <div class="service-card-modern">
+        <h3>FIFA 25 Discovery</h3>
+        <p>Enter the most competitive league in Meru. Test your skills against the best and win ultimate prizes. Events held weekly.</p>
+      </div>
+      <div class="service-card-modern">
+        <h3>Tekken 8 Clash</h3>
+        <p>The arena awaits. Join our bi-monthly Tekken tournaments and prove your might in the king of iron foot tournament.</p>
+      </div>
+      <div class="service-card-modern">
+        <h3>Console & PC Repair</h3>
+        <p>From overheating issues to GPU failures, our expert technicians will breathe new life into your gaming hardware.</p>
+      </div>
+      <div class="service-card-modern">
+        <h3>Elite Upgrade Consultation</h3>
+        <p>Planning a new build? Get a 1-on-1 session with our builders to design the ultimate 4K gaming powerhouse.</p>
+      </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section class="booking-form-wrapper">
+      <div id="bookingStatus"></div>
+      <h3>Reserve Your Spot</h3>
+      <form id="bookingForm">
+        <div class="form-group-modern">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group-modern">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group-modern">
+              <label for="phone">Phone Number</label>
+              <input type="text" id="phone" required placeholder="+254...">
+            </div>
+        </div>
+        
+        <div class="form-group-modern">
+          <label for="tournament">Select Service</label>
+          <select id="tournament" required>
+            <option value="" disabled selected>Choose a tournament or service</option>
+            <option value="FIFA 25 Discovery">FIFA 25 Discovery Tournament</option>
+            <option value="Tekken 8 Clash">Tekken 8 Clash</option>
+            <option value="Console Repair">Hardware Repair</option>
+            <option value="Hardware Upgrade">Hardware Upgrade Consultation</option>
+          </select>
+        </div>
+
+        <div class="form-group-modern">
+          <label for="date">Preferred Date</label>
+          <input type="date" id="date" required>
+        </div>
+        
+        <div class="form-group-modern">
+          <label for="message">Additional Details</label>
+          <textarea id="message" rows="4" placeholder="Mention any specific requirements..."></textarea>
+        </div>
+        
+        <button type="submit" id="submitBtn" class="btn-add" style="width: 100%; padding: 15px;">Confirm Booking</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('bookingStatus');
+        
+        btn.disabled = true;
+        btn.textContent = 'Processing Reservation...';
+        status.style.display = 'none';
+
+        const data = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            tournament: document.getElementById('tournament').value,
+            date: document.getElementById('date').value,
+            message: document.getElementById('message').value
+        };
+
+        try {
+            const res = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (res.ok) {
+                status.textContent = 'Booked! We will contact you shortly.';
+                status.style.background = 'rgba(0, 255, 204, 0.15)';
+                status.style.color = 'var(--primary)';
+                status.style.display = 'block';
+                document.getElementById('bookingForm').reset();
+            } else {
+                throw new Error(result.error || 'Submission failed');
+            }
+        } catch (err) {
+            status.textContent = 'Error: ' + err.message;
+            status.style.background = 'rgba(255, 68, 68, 0.15)';
+            status.style.color = '#ff4444';
+            status.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Confirm Booking';
+        }
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Pacific Gamers. All rights reserved. | Follow us on Instagram, TikTok, YouTube</p>
+  </footer>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>
+

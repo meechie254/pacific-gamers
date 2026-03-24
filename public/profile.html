@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Pacific Gamers</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <script src="js/auth-nav.js"></script>
+    <style>
+        body { background: radial-gradient(circle at top, #121212 0%, #0a0a0a 100%); }
+        .profile-container { max-width: 1100px; margin: 0 auto; padding: 50px 5%; }
+        .profile-header {
+            display: flex; align-items: center; gap: 30px;
+            background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+            border: 1px solid rgba(0,255,204,0.15); border-radius: 20px;
+            padding: 35px; margin-bottom: 35px;
+        }
+        .avatar {
+            width: 90px; height: 90px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #00aaff);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: bold; color: #000;
+            flex-shrink: 0; box-shadow: 0 0 30px rgba(0,255,204,0.3);
+        }
+        .profile-info h2 { font-size: 1.6rem; margin-bottom: 5px; }
+        .profile-info p { color: var(--text-dim); font-size: 0.9rem; }
+        .badge { display: inline-block; padding: 4px 14px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+            background: rgba(0,255,204,0.15); color: var(--primary);
+            border: 1px solid rgba(0,255,204,0.3); margin-top: 8px; }
+
+        .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 25px; }
+
+        .profile-sidebar { display: flex; flex-direction: column; gap: 15px; }
+        .stat-mini { background: #1a1a1a; border-radius: 15px; padding: 22px;
+            border: 1px solid rgba(255,255,255,0.06); text-align: center; }
+        .stat-mini .num { font-size: 2rem; font-weight: bold; color: var(--primary); }
+        .stat-mini .lbl { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; }
+
+        .profile-main {}
+        .section-card { background: #1a1a1a; border-radius: 15px; padding: 28px;
+            border: 1px solid rgba(255,255,255,0.06); margin-bottom: 22px; }
+        .section-card h3 { color: var(--primary); margin-bottom: 20px; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 12px; }
+
+        /* Order table */
+        .order-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        .order-table th { color: #666; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 1px; padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .order-table td { padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #ccc; }
+        .order-table tr:last-child td { border-bottom: none; }
+        .order-table tr:hover td { background: rgba(0,255,204,0.03); }
+        .badge-paid { background: rgba(0,255,204,0.15); color: var(--primary); border: 1px solid var(--primary);
+            padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+        .badge-pending { background: rgba(243,156,18,0.15); color: #f39c12; border: 1px solid #f39c12;
+            padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+
+        /* Logout btn */
+        .btn-logout { background: none; border: 1px solid rgba(255,68,68,0.4); color: #ff4444;
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;
+            transition: all 0.3s; width: 100%; margin-top: 5px; }
+        .btn-logout:hover { background: rgba(255,68,68,0.1); }
+
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .profile-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Pacific Gamers</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="booking.html">Booking</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar" id="avatarInitial">?</div>
+            <div class="profile-info">
+                <h2 id="profileName">Loading...</h2>
+                <p id="profileEmail">—</p>
+                <span class="badge">🎮 Elite Gamer</span>
+            </div>
+        </div>
+
+        <div class="profile-grid">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <div class="stat-mini">
+                    <div class="num" id="totalOrders">0</div>
+                    <div class="lbl">Total Orders</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="num" id="totalSpent">0</div>
+                    <div class="lbl">KES Spent</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="num" id="memberSince">—</div>
+                    <div class="lbl">Member Since</div>
+                </div>
+                <button class="btn-logout" onclick="logout()">Sign Out</button>
+            </div>
+
+            <!-- Main content -->
+            <div class="profile-main">
+                <!-- Order History -->
+                <div class="section-card">
+                    <h3>📦 Order History</h3>
+                    <table class="order-table">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderHistoryBody">
+                            <tr><td colspan="5" style="text-align:center; color:#555; padding: 30px;">Loading your orders...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Account Details -->
+                <div class="section-card">
+                    <h3>👤 Account Details</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="color:#666; font-size:0.75rem; text-transform:uppercase;">Username</label>
+                            <p id="detailUsername" style="margin-top:6px; font-weight:bold;">—</p>
+                        </div>
+                        <div>
+                            <label style="color:#666; font-size:0.75rem; text-transform:uppercase;">Email</label>
+                            <p id="detailEmail" style="margin-top:6px; font-weight:bold;">—</p>
+                        </div>
+                        <div>
+                            <label style="color:#666; font-size:0.75rem; text-transform:uppercase;">Account Type</label>
+                            <p style="margin-top:6px; color: var(--primary); font-weight:bold;">Elite Gamer</p>
+                        </div>
+                        <div>
+                            <label style="color:#666; font-size:0.75rem; text-transform:uppercase;">Status</label>
+                            <p style="margin-top:6px; color: #00ff88; font-weight:bold;">🟢 Active</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auth check
+        const token = localStorage.getItem('pacific_token');
+        const user  = JSON.parse(localStorage.getItem('pacific_user') || 'null');
+        if (!token || !user) { window.location.href = 'login.html'; }
+
+        // Populate header
+        document.getElementById('profileName').textContent    = user?.username || 'Gamer';
+        document.getElementById('profileEmail').textContent   = user?.email || '—';
+        document.getElementById('avatarInitial').textContent  = (user?.username || 'G')[0].toUpperCase();
+        document.getElementById('detailUsername').textContent = user?.username || '—';
+        document.getElementById('detailEmail').textContent    = user?.email || '—';
+
+        // Load order history from backend
+        async function loadOrders() {
+            try {
+                const res = await fetch('/api/admin/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const allOrders = await res.json();
+
+                // Filter by email if backend doesn't filter by user
+                const myOrders = Array.isArray(allOrders)
+                    ? allOrders.filter(o => o.email === user?.email)
+                    : [];
+
+                const tbody = document.getElementById('orderHistoryBody');
+                if (!myOrders.length) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#555; padding:30px;">
+                        No orders yet. <a href="shop.html" style="color:var(--primary);">Browse the shop →</a>
+                    </td></tr>`;
+                    return;
+                }
+
+                const totalSpent = myOrders.reduce((sum, o) => {
+                    const v = parseFloat((o.total || '0').replace(/[^0-9.]/g, ''));
+                    return sum + (isNaN(v) ? 0 : v);
+                }, 0);
+
+                document.getElementById('totalOrders').textContent = myOrders.length;
+                document.getElementById('totalSpent').textContent  = totalSpent.toLocaleString();
+
+                if (myOrders[0]?.created_at) {
+                    document.getElementById('memberSince').textContent =
+                        new Date(myOrders[0].created_at).toLocaleDateString('en', { month:'short', year:'numeric' });
+                }
+
+                tbody.innerHTML = myOrders.map(o => {
+                    let items = '—';
+                    try { items = JSON.parse(o.items).map(i => i.name).join(', '); } catch {}
+                    return `<tr>
+                        <td><code style="color:#888;">#ORD-${String(o.id).padStart(4,'0')}</code></td>
+                        <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${items}</td>
+                        <td style="color:var(--primary); font-weight:bold;">${o.total}</td>
+                        <td><span class="${o.status === 'Paid' ? 'badge-paid' : 'badge-pending'}">${o.status}</span></td>
+                        <td>${new Date(o.created_at).toLocaleDateString()}</td>
+                    </tr>`;
+                }).join('');
+            } catch (err) {
+                document.getElementById('orderHistoryBody').innerHTML =
+                    `<tr><td colspan="5" style="text-align:center; color:#555; padding:30px;">Could not load orders.</td></tr>`;
+            }
+        }
+
+        function logout() {
+            if (!confirm('Sign out of Pacific Gamers?')) return;
+            localStorage.removeItem('pacific_token');
+            localStorage.removeItem('pacific_user');
+            window.location.href = 'login.html';
+        }
+
+        loadOrders();
+    </script>
+</body>
+</html>

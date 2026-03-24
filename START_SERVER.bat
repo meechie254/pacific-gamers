@@ -1,16 +1,17 @@
 @echo off
 echo ==========================================
-echo    ZENCA GAMERS - DEVELOPMENT SERVER
+echo    PACIFIC GAMERS - DEVELOPMENT SERVER
 echo ==========================================
 echo.
-echo [1] Starting Node.js Server on http://localhost:3000
-echo [2] Opening login.html in your default browser...
+echo [1] Starting Node.js Server (Port 3000) with Live Watch...
+echo [2] Opening index.html in your default browser...
 echo.
 echo Press Ctrl+C to stop the server when you are done.
 echo.
 
-:: Open browser
-start http://localhost:3000/login.html
+:: Open browser (with a small delay to ensure server started)
+timeout /t 2 /nobreak > nul
+start http://localhost:3000/index.html
 
-:: Start Node.js Server
-node server.js
+:: Start Node.js Server in Watch Mode
+node --watch server.js

@@ -1,4 +1,4 @@
-# Zenca Gamers - Elite 4K Gaming Universe
+# Pacific Gamers - Elite 4K Gaming Universe
 
 A professional Node.js web application for a premium gaming store. This project features a modular backend, secure administration, and an immersive user interface.
 
@@ -49,4 +49,4 @@ A professional Node.js web application for a premium gaming store. This project 
 
 ## 📜 License
 
-© 2026 Zenca Gamers. All rights reserved.
+© 2026 Pacific Gamers. All rights reserved.

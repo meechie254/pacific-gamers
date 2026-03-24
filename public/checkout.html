@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Pacific Gamers</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <script src="js/auth-nav.js"></script>
+  <script src="js/live-chat.js"></script>
+  <script src="js/ui.js" defer></script>
+</head>
+<body class="checkout-page">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <h1>Pacific Gamers</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="booking.html">Booking</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="checkout">
+    <div class="checkout-wrapper">
+      <!-- Left Column: Forms -->
+      <div class="checkout-main">
+        <form id="checkoutForm">
+          <!-- Section 1: Customer Information -->
+          <section class="checkout-section">
+            <h3><span>1.</span> Customer Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="john@example.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="+254 700 000 000" required>
+            </div>
+          </section>
+
+          <!-- Section 2: Shipping Address -->
+          <section class="checkout-section">
+            <h3><span>2.</span> Shipping & Delivery</h3>
+            <div class="form-group">
+              <label for="address">Street Address / Estate</label>
+              <input type="text" id="address" placeholder="e.g. Makutano Area, Selenite Mall" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="Meru" required>
+              </div>
+              <div class="form-group">
+                <label for="postal">Postal Code (Optional)</label>
+                <input type="text" id="postal" placeholder="60200">
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 3: Payment Method -->
+          <section class="checkout-section">
+            <h3><span>3.</span> Payment Method</h3>
+            <div class="form-group">
+              <select id="payment" required>
+                <option value="" disabled selected>Select Payment Method</option>
+                <option value="mpesa">M-Pesa (Direct STK Push)</option>
+                <option value="card">Credit/Debit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="cash">Cash on Collection</option>
+              </select>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- Right Column: Order Summary -->
+      <aside class="checkout-sidebar">
+        <div class="summary-card">
+          <h4 class="summary-title">Order Summary</h4>
+          <div id="cartItems">
+            <div class="summary-item">
+              <span>PS5 DualSense Edge</span>
+              <span>$199.00</span>
+            </div>
+            <div class="summary-item">
+              <span>FIFA 25 (Digital)</span>
+              <span>$59.00</span>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <span>Subtotal</span>
+            <span id="subtotalDisplay">$258.00</span>
+          </div>
+          <div class="summary-item">
+            <span>Shipping</span>
+            <span style="color: #00ffcc;">Free</span>
+          </div>
+          
+          <div class="summary-item total">
+            <span>Total</span>
+            <span id="totalDisplay">$258.00</span>
+          </div>
+
+          <button type="submit" form="checkoutForm" class="btn-add btn-checkout">
+            Confirm Order
+          </button>
+          
+          <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 15px;">
+            Secure Encrypted Transaction 🔒
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Payment Instruction Modal -->
+  <div id="paymentModal" class="payment-modal">
+    <div class="payment-card">
+      <h2>M-Pesa Payment</h2>
+      <p>To complete your order, please process the payment manually:</p>
+      
+      <div class="payment-steps">
+        <p>1. Go to M-Pesa Menu</p>
+        <p>2. Select <strong>Lipa na M-Pesa</strong></p>
+        <p>3. Select <strong>Pochi la Biashara</strong></p>
+        <div class="highlight-box">
+          Phone Number: <strong>0701668561</strong><br>
+          Amount: <strong id="modalAmount">KES 0.00</strong>
+        </div>
+        <p>4. Enter your PIN and Send</p>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #888; margin-bottom: 25px;">
+        Once paid, our team will verify the transaction and ship your items!
+      </p>
+
+      <button class="btn-add" id="modalBtn" onclick="window.location.href='index.html'">
+        I have paid - Go Home
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Pacific Gamers. All rights reserved. | Follow us on Instagram, TikTok, YouTube</p>
+  </footer>
+  
+  <script src="js/cart.js"></script>
+  <script>
+    function loadOrderSummary() {
+        const items = Cart.getItems();
+        const container = document.getElementById('cartItems');
+        const subtotalDisplay = document.getElementById('subtotalDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const subtotal = Cart.getTotal();
+        
+        if (items.length === 0) {
+            container.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">Your cart is empty.</p>';
+            document.querySelector('.btn-checkout').disabled = true;
+            document.querySelector('.btn-checkout').style.opacity = '0.5';
+            return;
+        }
+
+        container.innerHTML = items.map(item => `
+            <div class="summary-item">
+                <span>${item.name} (x${item.quantity})</span>
+                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+            </div>
+        `).join('');
+        
+        if (subtotalDisplay) subtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
+        if (totalDisplay) totalDisplay.textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const items = Cart.getItems();
+      if (items.length === 0) {
+          alert('Your cart is empty!');
+          return;
+      }
+
+      // Collect data
+      const orderData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: `${document.getElementById('address').value}, ${document.getElementById('city').value}`,
+        items: items,
+        total: `KES ${(Cart.getTotal() * 110).toLocaleString()}`, // Convert to KES for Pochi 
+        payment: document.getElementById('payment').value
+      };
+
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          const paymentMethod = document.getElementById('payment').value;
+          
+          if (paymentMethod === 'mpesa') {
+            document.getElementById('modalAmount').textContent = orderData.total;
+            document.getElementById('paymentModal').classList.add('active');
+            
+            // Clear cart after successful local order recording
+            Cart.clear();
+          } else {
+            alert('Order placed successfully! Order ID: ' + result.orderId);
+            Cart.clear();
+            window.location.href = 'index.html';
+          }
+        } else {
+          alert('Error: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Checkout failed:', error);
+        alert('Could not connect to the server. Please try again later.');
+      }
+    });
+
+    // Initialize
+    loadOrderSummary();
+  </script>
+</body>
+</html>

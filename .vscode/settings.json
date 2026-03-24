@@ -4,7 +4,7 @@
         "baseUri": "/",
         "proxyUri": "http://localhost:3000"
     },
-    "liveServer.settings.port": 5501,
+    "liveServer.settings.port": 5506,
     "liveServer.settings.NoBrowser": false,
     "liveServer.settings.ignoreFiles": [
         ".vscode/**",

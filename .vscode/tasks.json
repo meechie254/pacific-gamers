@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Zenca Project",
+            "label": "Run Pacific Project",
             "type": "shell",
             "command": "node server.js",
             "group": {
