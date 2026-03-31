@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         debounceTimer = setTimeout(async () => {
             try {
-                const res = await fetch(`http://localhost:3000/api/products?search=${encodeURIComponent(query)}`);
+                const res = await fetch(`/api/products?search=${encodeURIComponent(query)}`);
                 const items = await res.json();
 
                 if (!items.length) {
