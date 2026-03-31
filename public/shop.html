@@ -7,11 +7,9 @@
   <meta name="description" content="Shop the latest consoles, accessories, and game titles at Pacific Gamers. Elevate your play with our premium selection.">
   <meta name="keywords" content="gaming shop, buy games, gaming consoles, accessories, Pacific Gamers">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/chat.css">
   <link rel="stylesheet" href="css/animations.css">
   <script src="js/cart.js"></script>
   <script src="js/auth-nav.js"></script>
-  <script src="js/live-chat.js"></script>
   <script src="js/ui.js" defer></script>
 </head>
 <body class="shop-page">
@@ -98,7 +96,7 @@
     async function loadProducts() {
       console.log('Fetching products from:', window.location.origin);
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch('http://localhost:3000/api/products');
         allProducts = await res.json();
         renderProducts(allProducts);
       } catch (err) {
@@ -115,8 +113,8 @@
           <div class="product-info">
             <h3>${p.name}</h3>
             <p class="product-price">$${p.price}</p>
-            <p class="product-desc">${p.description}</p>
-            <button onclick='Cart.addItem(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="btn-add">Add to Cart</button>
+            <p class="product-desc">${p.description || ''}</p>
+            <button onclick="Cart.addItem({id: ${p.id}, name: '${(p.name || '').replace(/'/g, "\\'")}', price: ${p.price}, image_url: '${(p.image_url || '').replace(/'/g, "\\'")}'})" class="btn-add">Add to Cart</button>
           </div>
         </article>
       `).join('') || '<p style="text-align: center; color: #888; grid-column: 1/-1;">No products found in this category.</p>';

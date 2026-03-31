@@ -1,333 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Pacific Gamers</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .admin-container { padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
-    .admin-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid rgba(0, 255, 204, 0.1); }
-    .admin-table th, .admin-table td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .admin-table th { background: rgba(0, 255, 204, 0.05); color: var(--primary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-    .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
-    .status-pending { background: rgba(243, 156, 18, 0.2); color: #f39c12; border: 1px solid #f39c12; }
-    .status-paid { background: rgba(0, 255, 204, 0.2); color: var(--primary); border: 1px solid var(--primary); }
-    
-    /* Stats Bar */
-    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
-    .stat-card { background: var(--bg-card); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
-    .stat-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); opacity: 0.3; }
-    .stat-card h3 { font-size: 0.8rem; color: #888; text-transform: uppercase; margin-bottom: 10px; }
-    .stat-card .value { font-size: 1.8rem; font-weight: bold; color: white; }
-    .stat-card .trend { font-size: 0.8rem; color: var(--primary); margin-top: 5px; }
 
-    /* Chart Area */
-    .chart-container { background: var(--bg-card); padding: 30px; border-radius: 15px; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.05); height: 300px; }
-
-    /* Tabs */
-    .admin-tabs { display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .tab-btn { padding: 10px 20px; cursor: pointer; color: #888; border-bottom: 2px solid transparent; transition: all 0.3s; background: none; border-top: none; border-left: none; border-right: none; font-weight: bold; }
-    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* Modal */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; }
-    .modal-content { background: var(--bg-card); padding: 40px; border-radius: 20px; width: 500px; border: 1px solid var(--primary); }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; color: #888; font-size: 0.8rem; margin-bottom: 8px; }
-    .form-control { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; outline: none; }
-    .form-control:focus { border-color: var(--primary); }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <nav class="navbar">
-    <h1>Pacific Gamers <span style="font-size: 0.8rem; color: #888;">Admin</span></h1>
-    <ul>
-      <li><a href="index.html">View Site</a></li>
-      <li><button id="logoutBtn" style="background: none; border: 1px solid rgba(255,255,255,0.2); color: #888; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-left: 20px;">Logout</button></li>
-    </ul>
-  </nav>
-
-  <main class="admin-container">
-    <div class="admin-tabs" id="adminTabBar">
-      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-      <button class="tab-btn" data-tab="analytics">Analytics</button>
-      <button class="tab-btn" data-tab="products">Inventory</button>
-      <button class="tab-btn" data-tab="bookings">Bookings</button>
-      <button class="tab-btn" data-tab="messages">Messages</button>
-      <button class="tab-btn" data-tab="subscriptions">Subscribers</button>
-      <button class="tab-btn" data-tab="settings">Settings</button>
-    </div>
-
-    <!-- Dashboard Tab -->
-    <div id="dashboard" class="tab-content active">
-      <!-- Stats Overview -->
-    <div class="stats-bar">
-      <div class="stat-card">
-        <h3>Total Revenue</h3>
-        <div class="value" id="statRevenue">KES 0</div>
-        <div class="trend">↑ 12% from last week</div>
-      </div>
-      <div class="stat-card">
-        <h3>Total Orders</h3>
-        <div class="value" id="statOrders">0</div>
-        <div class="trend" style="color: #f39c12;">4 Pending</div>
-      </div>
-      <div class="stat-card">
-        <h3>Avg. Order Value</h3>
-        <div class="value" id="statAvg">KES 0</div>
-        <div class="trend">Based on paid orders</div>
-      </div>
-      <div class="stat-card">
-        <h3>Messages</h3>
-        <div class="value" id="statMessages">0</div>
-        <div class="trend">New inquiries today</div>
-      </div>
-      <div class="stat-card">
-        <h3>Subscribers</h3>
-        <div class="value" id="statSubscribers">0</div>
-        <div class="trend">Newsletter growth</div>
-      </div>
-    </div>
-
-    <!-- Analytics Chart (single line chart) -->
-    <div style="display:grid; grid-template-columns: 1fr 300px; gap: 20px; margin-bottom: 40px;">
-      <div class="chart-container" style="height:260px;">
-        <h3 style="color:var(--primary);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">📈 Revenue (Last 7 Days)</h3>
-        <canvas id="growthChart" style="max-height:200px;"></canvas>
-      </div>
-      <div class="chart-container" style="height:260px;">
-        <h3 style="color:var(--primary);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">🎮 Orders by Category</h3>
-        <canvas id="categoryChart" style="max-height:200px;"></canvas>
-      </div>
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="color: var(--primary); margin: 0;">Recent Orders</h2>
-      <button class="btn-add" data-id="loadData(" style="padding: 8px 15px; font-size: 0.8rem;">Refresh Data</button>
-    </div>
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Customer</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th>Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="ordersBody">
-        <tr><td colspan="7" style="text-align:center;">Loading orders...</td></tr>
-      </tbody>
-    </table>
-
-      <h2 style="color: var(--primary); margin-bottom: 20px;">Contact Messages</h2>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>From</th>
-            <th>Subject</th>
-            <th>Message</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody id="messagesBody">
-          <tr><td colspan="5" style="text-align:center;">Loading messages...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Analytics Tab -->
-    <div id="analytics" class="tab-content">
-      <h2 style="color:var(--primary);margin-bottom:25px;">Platform Analytics</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-bottom:30px;">
-        <div class="chart-container" style="height:300px;">
-          <h3 style="color:var(--primary);font-size:0.85rem;text-transform:uppercase;margin-bottom:15px;">📈 7-Day Revenue Trend</h3>
-          <canvas id="analyticsRevenueChart" style="max-height:240px;"></canvas>
-        </div>
-        <div class="chart-container" style="height:300px;">
-          <h3 style="color:var(--primary);font-size:0.85rem;text-transform:uppercase;margin-bottom:15px;">📦 Order Status Split</h3>
-          <canvas id="analyticsStatusChart" style="max-height:240px;"></canvas>
-        </div>
-      </div>
-      <div class="chart-container" style="height:260px;">
-        <h3 style="color:var(--primary);font-size:0.85rem;text-transform:uppercase;margin-bottom:15px;">📅 Monthly Overview</h3>
-        <canvas id="analyticsBarChart" style="max-height:200px;"></canvas>
-      </div>
-
-      <!-- Real-time Top Sellers Table -->
-      <div class="checkout-section" style="margin-top: 40px; border-color: rgba(0, 255, 204, 0.4);">
-        <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 20px;">🔥 Top Selling Products</h3>
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Product Name</th>
-              <th>Total Units Sold</th>
-              <th>Total Revenue (KES)</th>
-            </tr>
-          </thead>
-          <tbody id="topSellersBody">
-            <tr><td colspan="3" style="text-align: center;">Calculating top sellers...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Inventory Tab -->
-    <div id="products" class="tab-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="color: var(--primary); margin: 0;">Product Management</h2>
-        <div style="display: flex; gap: 10px;">
-          <input type="text" id="productSearch" oninput="filterProducts(" placeholder="Search products..." style="padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; width: 250px;">
-          <button class="btn-add" data-id="openProductModal(" style="padding: 10px 20px;">+ Add New Product</button>
-        </div>
-      </div>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Product</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="productsBody">
-          <tr><td colspan="6" style="text-align:center;">Loading products...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Bookings Tab -->
-    <div id="bookings" class="tab-content">
-      <h2 style="color: var(--primary); margin-bottom: 20px;">Service Bookings</h2>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Customer</th>
-            <th>Service</th>
-            <th>Details</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="bookingsBody">
-          <tr><td colspan="6" style="text-align:center;">Loading bookings...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Messages Tab -->
-    <div id="messages" class="tab-content">
-      <h2 style="color: var(--primary); margin-bottom: 20px;">All Messages</h2>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>From</th>
-            <th>Subject</th>
-            <th>Message</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody id="messagesBodyTab">
-          <tr><td colspan="5" style="text-align:center;">Loading messages...</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <!-- Subscriptions Tab -->
-    <div id="subscriptions" class="tab-content">
-      <h2 style="color: var(--primary); margin-bottom: 20px;">Newsletter Subscribers</h2>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Joined Date</th>
-          </tr>
-        </thead>
-        <tbody id="subsBody">
-          <tr><td colspan="3" style="text-align:center;">Loading subscribers...</td></tr>
-        </tbody>
-      </table>
-    </div>
-    
-    <!-- Settings Tab -->
-    <div id="settings" class="tab-content">
-      <div class="checkout-section" style="max-width: 600px; margin: 0 auto; background: var(--bg-card); padding: 40px; border-radius: 20px; border: 1px solid rgba(0, 255, 204, 0.2);">
-        <h3 style="color: var(--primary); margin-bottom: 25px; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px;">Admin Security Settings</h3>
-        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 30px;">Update your password to ensure your dashboard remains secure. You will be required to log in again after changing.</p>
-        
-        <form id="passwordChangeForm">
-          <div class="form-group">
-            <label for="currPass">Current Password</label>
-            <input type="password" id="currPass" class="form-control" required placeholder="Enter current password">
-          </div>
-          <div class="form-group">
-            <label for="newPass">New Password</label>
-            <input type="password" id="newPass" class="form-control" required placeholder="New secure password">
-          </div>
-          <div class="form-group">
-            <label for="confirmPass">Confirm New Password</label>
-            <input type="password" id="confirmPass" class="form-control" required placeholder="Repeat new password">
-          </div>
-          <button type="submit" class="btn-add" style="width: 100%; padding: 15px; margin-top: 20px;">Update Admin Password</button>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <!-- Product Modal -->
-  <div id="productModal" class="modal">
-    <div class="modal-content">
-      <h3 id="modalTitle" style="color: var(--primary); margin-bottom: 25px;">Add New Product</h3>
-      <form id="productForm">
-        <input type="hidden" id="prodId">
-        <div class="form-group">
-          <label>Product Name</label>
-          <input type="text" id="prodName" class="form-control" required placeholder="e.g. FIFA 25">
-        </div>
-        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <div>
-            <label>Price ($)</label>
-            <input type="number" id="prodPrice" class="form-control" required step="0.01">
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="prodCategory" class="form-control">
-              <option value="sports">Sports</option>
-              <option value="action">Action</option>
-              <option value="rpg">RPG</option>
-              <option value="consoles">Consoles</option>
-              <option value="accessories">Accessories</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea id="prodDesc" class="form-control" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Image URL</label>
-          <input type="text" id="prodImage" class="form-control" placeholder="img/filename.jpg or URL">
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 30px;">
-          <button type="submit" class="btn-add" style="flex: 2; padding: 12px;">Save Product</button>
-          <button type="button" data-id="closeProductModal(" class="btn-add" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #888;">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
     // ── WAIT FOR DOM READY ──
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -362,36 +33,34 @@
       // ─── AUTH CHECK (non-blocking, only redirect if explicitly rejected) ───
       const token = localStorage.getItem('pacific_token');
       if (!token) {
-        console.warn('Auth Failure: Clearing session to prevent redirect loop.'); localStorage.clear(); window.location.replace('login.html');
+        window.location.href = 'login.html';
         return;
       }
       fetch('/api/auth/check', { headers: { 'Authorization': 'Bearer ' + token } })
         .then(r => r.json())
         .then(data => {
           if (data.authenticated === false) {
-            console.warn('Auth Failure: Clearing session to prevent redirect loop.'); localStorage.clear(); window.location.replace('login.html');
+            window.location.href = 'login.html';
           }
         })
         .catch(() => { /* keep showing dashboard on network error */ });
 
       // Load all data
-      loadData().catch(e => console.error('Data Load Error:', e));
+      loadData();
     });
 
     function logout() {
       if (!confirm('Are you sure you want to logout?')) return;
       localStorage.removeItem('pacific_token');
       localStorage.removeItem('pacific_user');
-      console.warn('Auth Failure: Clearing session to prevent redirect loop.'); localStorage.clear(); window.location.replace('login.html');
+      window.location.href = 'login.html';
     }
 
     async function loadData() {
       const token = localStorage.getItem('pacific_token');
       try {
         // Parallel fetching for speed
-        
         const [ordRes, msgRes, prodRes, bookRes, polyRes, subRes, topRes] = await Promise.all([
-            
           fetch('/api/admin/orders', { headers: { 'Authorization': `Bearer ${token}` } }),
           fetch('/api/admin/messages', { headers: { 'Authorization': `Bearer ${token}` } }),
           fetch('/api/products/all', { headers: { 'Authorization': `Bearer ${token}` } }),
@@ -399,12 +68,9 @@
           fetch('/api/admin/analytics', { headers: { 'Authorization': `Bearer ${token}` } }),
           fetch('/api/admin/subscriptions', { headers: { 'Authorization': `Bearer ${token}` } }),
           fetch('/api/admin/top-sellers', { headers: { 'Authorization': `Bearer ${token}` } })
-        
-        ].map(p => p.catch(error => ({ json: () => ({ error: error.message }), status: 500 }))));
+        ]);
 
-        
         const [ordersData, messages, allInvProductsData, bookings, analytics, subscribers, topSellers] = await Promise.all([
-            
           ordRes.json(),
           msgRes.json(),
           prodRes.json(),
@@ -412,14 +78,13 @@
           polyRes.json(),
           subRes.json(),
           topRes.json()
-        
-        ].map(p => p.catch(error => ({ json: () => ({ error: error.message }), status: 500 }))));
+        ]);
         
         // Orders Processing
         const orders = Array.isArray(ordersData) ? ordersData : [];
         const paidOrders = orders.filter(o => o.status === 'Paid');
         const revenue = paidOrders.reduce((acc, o) => {
-            const val = parseFloat(String(o.total || '0').replace(/[^0-9.]/g, ''));
+            const val = parseFloat(o.total.replace(/[^0-9.]/g, ''));
             return acc + (isNaN(val) ? 0 : val);
         }, 0);
         
@@ -432,15 +97,12 @@
           <tr>
             <td><code style="color: #888;">#ORD-${String(o.id).padStart(4, '0')}</code></td>
             <td><strong>${o.name}</strong><br><small style="color: #666;">${o.email}</small></td>
-            <td><span style="font-size: 0.85rem;">${(() => {
-                try { return JSON.parse(o.items).map(i => `${i.name || 'Item'} (x${i.quantity || 1})`).join(', '); }
-                catch(e) { return 'Invalid items data'; }
-            })()}</span></td>
+            <td><span style="font-size: 0.85rem;">${JSON.parse(o.items).map(i => `${i.name} (x${i.quantity || 1})`).join(', ')}</span></td>
             <td style="color: var(--primary); font-weight: bold;">${o.total}</td>
             <td><span class="status-badge ${o.status === 'Paid' ? 'status-paid' : 'status-pending'}">${o.status}</span></td>
             <td>${new Date(o.created_at).toLocaleDateString()}</td>
             <td>
-              ${o.status === 'Pending' ? `<button  data-id="${o.id}" style="padding: 6px 12px; cursor: pointer; background: var(--primary); color: black; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: bold; transition: all 0.2s;">MARK PAID</button>` : '<span style="color: #555; font-size: 0.7rem;">COMPLETED</span>'}
+              ${o.status === 'Pending' ? `<button onclick="updateStatus(${o.id})" style="padding: 6px 12px; cursor: pointer; background: var(--primary); color: black; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: bold; transition: all 0.2s;">MARK PAID</button>` : '<span style="color: #555; font-size: 0.7rem;">COMPLETED</span>'}
             </td>
           </tr>
         `).join('') || '<tr><td colspan="7" style="text-align:center;">No orders found.</td></tr>';
@@ -646,16 +308,14 @@
           },
           body: JSON.stringify({ status: 'Paid' })
         });
-        loadData().catch(e => console.error('Data Load Error:', e));
+        loadData();
       } catch (err) {
         alert('Failed to update status');
       }
     }
 
 
-    function editProduct(id) {
-      const p = allInvProducts.find(prod => prod.id === id);
-      if (!p) return;
+    function editProduct(p) {
       openProductModal(p);
     }
 
@@ -695,7 +355,7 @@
         status: 'available'
       };
       try {
-        const url = id ? `/api/products/${id}` : `/api/products`;
+        const url = id ? `/api/products/${id}` : '/api/products';
         const method = id ? 'PUT' : 'POST';
         const res = await fetch(url, {
           method: method,
@@ -708,7 +368,7 @@
         const result = await res.json();
         if (result.error) throw new Error(result.error);
         closeProductModal();
-        loadData().catch(e => console.error('Data Load Error:', e));
+        loadData();
       } catch (err) {
         alert('Error saving product: ' + err.message);
       }
@@ -723,7 +383,7 @@
             headers: { 'Authorization': `Bearer ${localStorage.getItem('pacific_token')}` }
         });
         delete deleteTimestamps[id]; // Clear timer
-        loadData().catch(e => console.error('Data Load Error:', e));
+        loadData();
       } catch (err) {
         alert('Error restoring product');
       }
@@ -737,7 +397,7 @@
           headers: { 'Authorization': `Bearer ${localStorage.getItem('pacific_token')}` }
         });
         deleteTimestamps[id] = Date.now();
-        loadData().catch(e => console.error('Data Load Error:', e));
+        loadData();
       } catch (err) {
         alert('Error deleting product');
       }
@@ -787,22 +447,27 @@
             </td>
             <td>
               ${(() => {
-                if (isDeleted) { const elapsed = deleteTimestamps[p.id] ? Math.floor((Date.now() - deleteTimestamps[p.id]) / 1000) : 0; const rem = Math.max(0, 30 - elapsed);
-                    return `<button class="btn-restore" data-id="${p.id}" style="padding: 5px 10px; cursor: pointer; background: var(--primary); color: black; border: none; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">UNDO DELETE</button><span class="delete-timer" data-id="${p.id}"></span>`;
+                if (isDeleted) {
+                    let timerHtml = '';
+                    if (deleteTimestamps[p.id]) {
+                        const elapsed = Math.floor((Date.now() - deleteTimestamps[p.id]) / 1000);
+                        const remaining = 30 - elapsed;
+                        if (remaining > 0) {
+                            timerHtml = `<span class="delete-timer" data-id="${p.id}" data-left="${remaining}" style="font-size: 0.7rem; color: #ff4444; margin-left: 5px; font-weight: bold;"> (${remaining}s left)</span>`;
+                        } else {
+                            timerHtml = `<span style="font-size: 0.7rem; color: #888; margin-left: 5px;"> (Deleting...)</span>`;
+                        }
+                    }
+                    return `<button onclick="restoreProduct(${p.id})" style="padding: 5px 10px; cursor: pointer; background: var(--primary); color: black; border: none; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">UNDO DELETE</button>${timerHtml}`;
                 } else {
-                    return `<button class="btn-edit-prod" data-id="${p.id}" style="padding: 5px 10px; cursor: pointer; background: none; border: 1px solid var(--primary); color: var(--primary); border-radius: 4px; font-size: 0.7rem;">EDIT</button>
-                    <button class="btn-delete-prod" data-id="${p.id}" style="padding: 5px 10px; cursor: pointer; background: none; border: 1px solid #ff4444; color: #ff4444; border-radius: 4px; font-size: 0.7rem; margin-left: 5px;">DELETE</button>`;
+                    return `<button onclick="editProduct(${JSON.stringify(p).replace(/"/g, '&quot;')})" style="padding: 5px 10px; cursor: pointer; background: none; border: 1px solid var(--primary); color: var(--primary); border-radius: 4px; font-size: 0.7rem;">EDIT</button>
+                    <button onclick="deleteProduct(${p.id})" style="padding: 5px 10px; cursor: pointer; background: none; border: 1px solid #ff4444; color: #ff4444; border-radius: 4px; font-size: 0.7rem; margin-left: 5px;">DELETE</button>`;
                 }
               })()}
             </td>
           </tr>
         `;
       }).join('') || '<tr><td colspan="6" style="text-align:center;">No products found.</td></tr>';
-
-      // Attach event listeners for dynamic buttons
-      prodBody.querySelectorAll('.btn-edit-prod').forEach(b => b.onclick = () => editProduct(Number(b.dataset.id)));
-      prodBody.querySelectorAll('.btn-delete-prod').forEach(b => b.onclick = () => deleteProduct(Number(b.dataset.id)));
-      prodBody.querySelectorAll('.btn-restore').forEach(b => b.onclick = () => restoreProduct(Number(b.dataset.id)));
     }
 
     /* ─── CHANGE PASSWORD HANDLER ─── */
@@ -825,19 +490,10 @@
         if (res.ok) {
           alert('Password changed! Please log in with your new credentials.');
           localStorage.clear();
-          console.warn('Auth Failure: Clearing session to prevent redirect loop.'); localStorage.clear(); window.location.replace('login.html');
+          window.location.href = 'login.html';
         } else alert('Error: ' + (result.error || result.message));
       } catch (err) { alert('Could not connect to server.'); }
     }
 
-    // Attach order status listeners
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('btn-mark-paid')) {
-            updateStatus(Number(e.target.dataset.id));
-        }
-    });
-
     // loadData is called inside DOMContentLoaded above
-  </script>
-</body>
-</html>
+  

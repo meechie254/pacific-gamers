@@ -172,7 +172,7 @@
         // Load order history from backend
         async function loadOrders() {
             try {
-                const res = await fetch('/api/admin/orders', {
+                const res = await fetch('http://localhost:3000/api/admin/orders', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const allOrders = await res.json();

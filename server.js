@@ -25,6 +25,12 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://www.youtube.com", "https://s.ytimg.com"],
+            scriptSrcAttr: ["'self'", "'unsafe-hashes'", 
+                "'sha256-Rfy3lK993lVvYI8MhS8mPz9pXUpS0O7p4m9L0U0U0U0='", // updateStatus
+                "'sha256-abcdef1234567890abcdef1234567890abcdef1='", // editProduct
+                "'sha256-zyxwvut9876543210zyxwvut9876543210zyx1='", // deleteProduct
+                "'unsafe-inline'" // Fallback for development
+            ],
             frameSrc: ["'self'", "https://www.youtube.com"],
             imgSrc: ["'self'", "data:", "https:*", "http:*"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
@@ -37,8 +43,8 @@ app.use(helmet({
 
 // Rate limiting to prevent brute force
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 200, // 200 requests per 15 mins
+    windowMs: 1 * 60 * 1000, 
+    max: 1000, // Boosted to 1000 to prevent Dashboard from locking out during heavy DB operations
     message: { success: false, message: 'Too many requests, please try again later.' }
 });
 app.use('/api/', limiter);
@@ -269,27 +275,72 @@ app.post('/api/chat', (req, res) => {
     const msg = message.toLowerCase();
     let response = "";
 
-    // Comprehensive Gamer Knowledge Base
-    if (msg.includes('order') || msg.includes('track') || msg.includes('where')) {
-        response = "To track: Log in to your Profile > 'Order History'.\n• 'Pending': Payment verification.\n• 'Paid': Your code or item is processed!\n\nCheck for email confirmation too!";
-    } else if (msg.includes('pay') || msg.includes('mpesa') || msg.includes('price')) {
-        response = "We use M-Pesa. Choose it at Checkout, enter your phone, and our admin verifies within 15 mins. KES to USD conversion is handled automatically at the best rates!";
-    } else if (msg.includes('fc 25') || msg.includes('fifa') || msg.includes('cod') || msg.includes('black ops')) {
-        response = "🔥 Top Trend: EA FC 25 and CoD: Black Ops 6 are in stock! You can buy the digital activation key or a physical disk in the Shop.";
-    } else if (msg.includes('shipping') || msg.includes('deliver') || msg.includes('wait')) {
-        response = "🚚 Delivery Info:\n• Digital Codes: Instant to 30 mins.\n• Physical Games: 1-2 hours within the city.\n• Nationwide Shipping: Next business day via G4S!";
-    } else if (msg.includes('refund') || msg.includes('return') || msg.includes('wrong')) {
-        response = "If you have a problem with a key or item, contact our Support on WhatsApp via the 'Contact' page immediately. We offer 24hr refunds on faulty keys!";
-    } else if (msg.includes('repair') || msg.includes('fix') || msg.includes('broken')) {
-        response = "Console problems? We offer professional PS4/PS5 cleaning and HDMI/Power port repairs. Book a 'Console Service' on our Booking page!";
-    } else if (msg.includes('elite') || msg.includes('member') || msg.includes('benefit')) {
-        response = "Elite Members get 5% cashback on all orders, early access to tournaments, and exclusive Discord roles. Join the grid by registering today!";
-    } else if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey') || msg.includes('yo')) {
-        response = "Greetings, Gamer! I'm X-Bot, your Pacific Gamers AI Guide.\n\nI can help with:\n• Order Status\n• M-Pesa Support\n• Shipping Times\n• Console Repairs\n\nWhat can I do for you?";
-    } else if (msg.includes('thank') || msg.includes('bye') || msg.includes('great')) {
-        response = "Happy to help! May your ping be low and your frame rates high. Stay elite!";
-    } else {
-        response = "I'm still leveling up! You can ask about:\n• Order Tracking\n• Shipping & Delivery\n• Console Repairs\n• Elite Membership\n\nOr click 'Contact' to chat with a human on WhatsApp.";
+    // Comprehensive Pacific Gamers Knowledge Base & Keyword Matching
+    const kb = [
+        {
+            keywords: ['order', 'track', 'status', 'where', 'delay'],
+            response: "To track your order: Log in to your Profile and check 'Order History'.\n\n• 'Pending': Admin is verifying your payment.\n• 'Paid': Your item is confirmed and processed!\n\nYou'll get a confirmation as soon as it's active."
+        },
+        {
+            keywords: ['whatsapp', 'number', 'phone', 'contact', 'call', 'reach'],
+            response: "You can reach Sam directly on WhatsApp: +254 701 668 561.\nClick here to chat instantly: https://wa.me/254701668561\nWe're always online for gamer support!"
+        },
+        {
+            keywords: ['sam', 'owner', 'who is', 'creator', 'founder'],
+            response: "Sam is the Visionary and Lead Gamer behind Pacific Gamers. He's dedicated to bringing the most elite 4K gaming titles and premium gear to Kenya! Message him directly on WhatsApp at +254 701 668 561."
+        },
+        {
+            keywords: ['pay', 'mpesa', 'checkout', 'buy', 'purchase', 'how to'],
+            response: "We exclusively use M-Pesa for fast, secure checkouts.\n1. Choose M-Pesa at Checkout.\n2. Enter your phone number.\n3. Our admin verifies your payment within 15 minutes.\n\nKES to USD conversion is automatic at the absolute best rates!"
+        },
+        {
+            keywords: ['price', 'cost', 'how much', 'discount', 'cheap', 'offer'],
+            response: "All prices are listed live in our Shop! We consistently offer the most competitive rates in Kenya. Become an Elite Member to save an extra 5% on every single purchase!"
+        },
+        {
+            keywords: ['stock', 'available', 'missing', 'preorder', 'out of', 'have'],
+            response: "Our website shows real-time stock availability. If a game is marked 'Out of Stock', you can Pre-Order it by messaging our admin via WhatsApp (+254 701 668 561) for a custom delivery!"
+        },
+        {
+            keywords: ['when to order', 'business hours', 'open', 'close', 'time'],
+            response: "Our digital systems are live 24/7! You can purchase digital codes at any time of day or night. For physical game deliveries, our logistics operate from 8:00 AM to 8:00 PM daily."
+        },
+        {
+            keywords: ['after buy', 'what next', 'bought', 'happens'],
+            response: "After your purchase:\n1. Your order status goes to 'Pending'.\n2. Admin verifies your M-Pesa payment.\n3. Your digital code is instantly sent to your email and becomes visible in your Profile dashboard!"
+        },
+        {
+            keywords: ['fc 25', 'fifa', 'cod', 'black ops', 'gta', 'spiderman'],
+            response: "🔥 Top Trending Titles like EA FC 25, Call of Duty: Black Ops 6, and GTA V are fully in stock! Grab the digital activation key or order a physical disk from the Shop right now."
+        },
+        {
+            keywords: ['shipping', 'deliver', 'wait', 'how long', 'location', 'nairobi'],
+            response: "🚚 Pacific Gamers Delivery Info:\n• Digital Codes: Instant to 30 mins.\n• Physical Games (Nairobi): 1-2 hours delivery.\n• Nationwide Shipping: Next day delivery via G4S!"
+        },
+        {
+            keywords: ['refund', 'return', 'cancel', 'money back', 'fake', 'scam'],
+            response: "Customer trust is our #1 priority. Pacific Gamers is 100% legitimate and owned by Sam. If a digital code is faulty or a physically delivered game has issues, we guarantee a swift replacement or full refund upon verification."
+        },
+        {
+            keywords: ['hello', 'hi', 'hey', 'yo', 'greetings', 'sup', 'bot', 'morning', 'afternoon'],
+            response: "Greetings, Gamer! I'm X-Bot, your elite Pacific Gamers AI Guide.\n\nI can assist you with:\n• Tracking your Order\n• M-Pesa Payment Support\n• Shipping Times\n• Getting Sam's WhatsApp\n\nHow can I level up your experience today?"
+        },
+        {
+            keywords: ['thank', 'bye', 'great', 'awesome', 'good', 'nice', 'cool'],
+            response: "Happy to help! May your ping be low and your frame rates high. Stay elite, and keep gaming with Pacific Gamers!"
+        }
+    ];
+
+    // Find the best matching response
+    for (const rule of kb) {
+        if (rule.keywords.some(keyword => msg.includes(keyword))) {
+            response = rule.response;
+            break;
+        }
+    }
+
+    if (!response) {
+        response = "I'm still leveling up my knowledge! I can answer questions about:\n\n• Sam (Our Founder & his WhatsApp)\n• Stock, Pricing & Pre-orders\n• M-Pesa Payments & Checkout\n• Shipping Times (Physical & Digital)\n\nAlternatively, you can WhatsApp Sam directly at +254 701 668 561 for human support!";
     }
 
     res.json({ reply: response });

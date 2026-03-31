@@ -24,6 +24,30 @@ const Cart = {
         
         this.save(cart);
         this.updateBadge();
+        this.showToast(`${product.name} added to cart!`);
+    },
+
+    showToast(message) {
+        let toast = document.getElementById('cart-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'cart-toast';
+            toast.style.cssText = 'position:fixed;bottom:100px;right:20px;background:var(--primary);color:#000;padding:15px 25px;border-radius:8px;font-weight:bold;z-index:9999;box-shadow:0 10px 30px rgba(0,255,204,0.3);transform:translateX(100px);opacity:0;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+        });
+
+        // Hide after 3s
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100px)';
+            toast.style.opacity = '0';
+        }, 3000);
     },
 
     removeItem(id) {

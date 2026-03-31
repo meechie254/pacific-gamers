@@ -6,10 +6,8 @@
   <title>Contact Us - Pacific Gamers | Get in Touch for Elite Support</title>
   <meta name="description" content="Have questions about gaming gear, orders, or upcoming tournaments? Contact Pacific Gamers today. We're here to help you level up.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/chat.css">
   <link rel="stylesheet" href="css/animations.css">
   <script src="js/auth-nav.js"></script>
-  <script src="js/live-chat.js"></script>
   <script src="js/ui.js" defer></script>
 </head>
 <body class="contact-page">
@@ -49,13 +47,12 @@
 
         <div class="info-card">
           <h3 class="widget-title">Connect</h3>
-          <p><strong>Phone:</strong> +254701668561</p>
-          <p><strong>Email:</strong> support@pacificgamers.com</p>
+          <p><strong>Phone:</strong> <a href="tel:+254701668561" style="color: inherit; text-decoration: none;">+254 701 668 561</a></p>
+          <p><strong>Email:</strong> <a href="mailto:support@pacificgamers.com" style="color: inherit; text-decoration: none;">support@pacificgamers.com</a></p>
           <div class="social-icons">
-            <!-- Simplified social links -->
-            <a href="#" class="filter-item">Instagram</a>
-            <a href="#" class="filter-item">TikTok</a>
-            <a href="#" class="filter-item">WhatsApp</a>
+            <a href="https://www.instagram.com/pacific_gamers" target="_blank" class="filter-item">Instagram</a>
+            <a href="https://www.tiktok.com/@pacific_gamers" target="_blank" class="filter-item">TikTok</a>
+            <a href="https://wa.me/254701668561?text=Hello%20Pacific%20Gamers!%20I%20have%20an%20inquiry." target="_blank" class="filter-item green">WhatsApp</a>
           </div>
         </div>
       </section>
@@ -170,7 +167,7 @@
       };
 
       try {
-        const response = await fetch('/api/contact', {
+        const response = await fetch('http://localhost:3000/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)

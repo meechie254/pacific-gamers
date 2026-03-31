@@ -4,12 +4,15 @@
         "baseUri": "/",
         "proxyUri": "http://localhost:3000"
     },
-    "liveServer.settings.port": 5506,
+    "liveServer.settings.port": 5507,
     "liveServer.settings.NoBrowser": false,
     "liveServer.settings.ignoreFiles": [
         ".vscode/**",
         "**/*.scss",
         "**/*.sass",
         "**/*.ts"
-    ]
+    ],
+    "files.readonlyInclude": {
+        "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true
+    }
 }
